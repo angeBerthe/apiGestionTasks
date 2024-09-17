@@ -1,5 +1,6 @@
 package ci.digitalacademy.apigestiontasks.services.dto;
 
+import ci.digitalacademy.apigestiontasks.models.Team;
 import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,4 +20,6 @@ public class MemberDTO {
     private String phoneNumber;
 
     private String slug;
+
+    private TeamDTO team;
 }
