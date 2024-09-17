@@ -73,7 +73,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDTO update(MemberDTO memberDTO, Long id) {
-        return null;
+        memberDTO.setId(id);
+        return update(memberDTO);
     }
 
     @Override
