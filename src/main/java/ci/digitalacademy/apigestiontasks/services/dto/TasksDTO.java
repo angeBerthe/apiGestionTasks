@@ -22,4 +22,6 @@ public class TasksDTO {
     private String slug;
 
     private ProjectDTO project;
+
+    private TeamDTO team;
 }
