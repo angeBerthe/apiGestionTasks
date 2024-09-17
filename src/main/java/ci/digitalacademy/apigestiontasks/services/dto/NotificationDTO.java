@@ -20,5 +20,4 @@ public class NotificationDTO {
 
     private String slug;
 
-    private TasksDTO tasks;
 }
