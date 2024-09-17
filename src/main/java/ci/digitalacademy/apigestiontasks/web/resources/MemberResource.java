@@ -1,8 +1,10 @@
 package ci.digitalacademy.apigestiontasks.web.resources;
 
 import ci.digitalacademy.apigestiontasks.services.MemberService;
+import ci.digitalacademy.apigestiontasks.services.TeamService;
 import ci.digitalacademy.apigestiontasks.services.dto.MemberDTO;
 import ci.digitalacademy.apigestiontasks.services.dto.ProjectDTO;
+import ci.digitalacademy.apigestiontasks.services.dto.TeamDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,12 +26,19 @@ import java.util.Optional;
 public class MemberResource {
 
     private final MemberService memberService;
+    private final TeamService teamService;
 
     @PostMapping
     @Operation(summary = "save member", description = "this endpoint allow to save member")
-    public ResponseEntity<MemberDTO> saveMember(@RequestBody MemberDTO memberDTO){
+    public ResponseEntity<?> saveMember(@RequestBody MemberDTO memberDTO){
         log.debug("REST Request to save  {}", memberDTO);
-        return new ResponseEntity<>(memberService.save(memberDTO), HttpStatus.CREATED);
+        Optional<TeamDTO> teamDTO = teamService.findOne(memberDTO.getTeam().getId());
+        if (teamDTO.isPresent()){
+            memberDTO.setTeam(teamDTO.get());
+            MemberDTO member = memberService.save(memberDTO);
+            return new ResponseEntity<>(member, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>("not found", HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -55,6 +64,10 @@ public class MemberResource {
     }
 
     @PutMapping("{id}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Request to get member"),
+            @ApiResponse(responseCode = "404", description = "Member not found", content = @Content(schema = @Schema(implementation = String.class)))
+    })
     public ResponseEntity<?> updateMember(@RequestBody MemberDTO memberDTO, @PathVariable Long id){
         log.debug("REST, Request to update member {} {}", memberDTO, id);
         return new ResponseEntity<>(memberService.update(memberDTO, id), HttpStatus.OK);
