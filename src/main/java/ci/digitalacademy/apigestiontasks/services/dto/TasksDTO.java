@@ -1,6 +1,5 @@
 package ci.digitalacademy.apigestiontasks.services.dto;
 
-import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,4 +20,6 @@ public class TasksDTO {
     private String status;
 
     private String slug;
+
+    private ProjectDTO project;
 }
