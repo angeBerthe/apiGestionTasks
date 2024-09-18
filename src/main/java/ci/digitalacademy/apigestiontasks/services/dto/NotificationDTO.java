@@ -1,8 +1,5 @@
 package ci.digitalacademy.apigestiontasks.services.dto;
 
-
-
-import ci.digitalacademy.apigestiontasks.models.Tasks;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,5 +17,6 @@ public class NotificationDTO {
 
     private String slug;
 
-    private Tasks tasks;
+    private  TasksDTO tasks ;
+
 }
