@@ -1,8 +1,9 @@
-# Gestion d'un Forum - Spring Boot
+# Gestion de tâches - Spring Boot
 
 ## Description
 
-Ce projet est une application de **gestion de forum** permettant aux utilisateurs d'interagir sur différents **sujets** à travers des **messages**. Il y'a possibilité de créer des forums, des sujets, et des messages. L'application expose également des **API REST** pour la gestion des données.
+Ce projet est une application de **gestion de tâches** permettant aux utilisateurs d'assigner des **tâches** à des **équipes** pour travailler sur un **projet**. 
+L'application expose également des **API REST** pour la gestion des données.
 
 ## Fonctionnalités
 
