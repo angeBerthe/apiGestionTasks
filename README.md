@@ -73,4 +73,5 @@ Les principales entités du projet sont :
 5. L'api sera accessible à l'adresse [http://localhost:8081/api](http://localhost:8081  /api).
 
 
-### Documentation de l'api disponible via ce lien:[ [https://documenter.getpostman.com/view/7602674/2sAXqngkYz](https://documenter.getpostman.com/view/7602674/2sAXqngkYz)]
+### Documentation de l'api disponible via ce lien:
+(https://documenter.getpostman.com/view/33535322/2sAXqqdiSe)
