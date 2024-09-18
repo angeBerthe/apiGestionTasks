@@ -3,6 +3,7 @@ package ci.digitalacademy.apigestiontasks.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -13,7 +14,7 @@ import java.util.Set;
 @ToString
 @Entity
 @Table(name = "tasks")
-public class Tasks {
+public class Tasks implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +26,6 @@ public class Tasks {
     @Column(nullable = false)
     private LocalDate startDate;
 
-    @Column(nullable = false)
     private LocalDate endDate;
 
     @Column(nullable = false)
@@ -34,14 +34,12 @@ public class Tasks {
     @Column(unique = true)
     private String slug;
 
-    @ManyToOne
+    @ManyToOne()
     private Project project;
 
-    @OneToMany(mappedBy = "tasks")
+    @OneToMany(mappedBy = "tasks", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Notification> notifications;
 
-    @ManyToOne
-    private Team team;
 
 
 }

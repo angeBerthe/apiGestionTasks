@@ -3,6 +3,7 @@ package ci.digitalacademy.apigestiontasks.web.resources;
 import ci.digitalacademy.apigestiontasks.services.NotificationService;
 import ci.digitalacademy.apigestiontasks.services.dto.NotificationDTO;
 import ci.digitalacademy.apigestiontasks.services.dto.TasksDTO;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,12 +23,14 @@ public class NotificationResource {
     private final NotificationService notificationService;
 
     @GetMapping
+    @Operation(summary = "get all notification", description = "this endpoint allow to get all notification")
     public List<NotificationDTO> getAllNotifications() {
         log.info("REST Request to get all notifications");
         return notificationService.findAll();
     }
 
     @PostMapping("/create")
+    @Operation(summary = "create notification", description = "this endpoint allow to get create notification")
     public NotificationDTO createNotification(@RequestBody TasksDTO tasks, @RequestParam String operation) {
         log.debug("Creating notification for operation: {}", operation);
         NotificationDTO notification = new NotificationDTO();
@@ -56,7 +59,8 @@ public class NotificationResource {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteNotification(@PathVariable Long id) {
+    @Operation(summary = "delete notification", description = "this endpoint allow to get delete notification")
+    public ResponseEntity<?> deleteNotification(@PathVariable Long id) {
         log.debug("REST Request to delete Notification : {}", id);
         Optional<NotificationDTO> notification = notificationService.delete(id);
         if (notification.isPresent()) {
@@ -69,6 +73,7 @@ public class NotificationResource {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "get notification by id", description = "this endpoint allow to get notification by id")
     public ResponseEntity<NotificationDTO> getNotificationById(@PathVariable Long id) {
         log.debug("REST Request to get Notification by id : {}", id);
         Optional<NotificationDTO> notification = notificationService.delete(id);
@@ -77,6 +82,7 @@ public class NotificationResource {
     }
 
     @GetMapping("/wording/{wording}")
+    @Operation(summary = "get notification by wording", description = "this endpoint allow to get get notification by wording")
     public ResponseEntity<List<NotificationDTO>> getNotificationsByWording(@PathVariable String wording) {
         log.debug("REST Request to get Notifications by wording : {}", wording);
         List<NotificationDTO> notifications = notificationService.findByWording(wording);

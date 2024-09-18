@@ -1,6 +1,6 @@
 package ci.digitalacademy.apigestiontasks.services.impl;
 
-import ci.digitalacademy.apigestiontasks.mapping.MemberMapping;
+
 import ci.digitalacademy.apigestiontasks.models.Member;
 import ci.digitalacademy.apigestiontasks.repositories.MemberRepository;
 import ci.digitalacademy.apigestiontasks.services.MemberService;

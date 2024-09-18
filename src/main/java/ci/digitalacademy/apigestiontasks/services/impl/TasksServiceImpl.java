@@ -4,6 +4,7 @@ import ci.digitalacademy.apigestiontasks.models.Tasks;
 import ci.digitalacademy.apigestiontasks.repositories.TasksRepository;
 import ci.digitalacademy.apigestiontasks.services.TasksService;
 import ci.digitalacademy.apigestiontasks.services.dto.TasksDTO;
+import ci.digitalacademy.apigestiontasks.services.dto.TeamDTO;
 import ci.digitalacademy.apigestiontasks.services.mapper.TasksMapper;
 import ci.digitalacademy.apigestiontasks.services.mapping.ProjectMapping;
 import ci.digitalacademy.apigestiontasks.services.mapping.TaskMapping;
@@ -22,6 +23,7 @@ public class TasksServiceImpl implements TasksService {
 
     private final TasksRepository tasksRepository;
     private final TasksMapper tasksMapper;
+    private final TeamServiceImpl teamService;
 
     @Override
     public TasksDTO save(TasksDTO tasksDTO) {
@@ -30,6 +32,18 @@ public class TasksServiceImpl implements TasksService {
         tasks = tasksRepository.save(tasks);
         return tasksMapper.fromEntity(tasks);
     }
+
+    @Override
+    public TasksDTO saveWithProjectAndTeam(TasksDTO tasks) {
+        Optional<TeamDTO> team = teamService.findOne(tasks.getTeam().getId());
+
+        if (team.isPresent()) {
+            tasks.setTeam(team.get());
+            return saveTasks(tasks);
+        } else {
+            return null;
+        }
+}
 
     @Override
     public Optional<TasksDTO> findOne(Long id) {
@@ -90,6 +104,7 @@ public class TasksServiceImpl implements TasksService {
 
     @Override
     public TasksDTO partialUpdate(TasksDTO tasksDTO, Long id) {
+        log.debug("Request to update partial Tasks {} {}", tasksDTO, id);
         return tasksRepository.findById(id).map(tasks -> {
             TaskMapping.partialUpdate(tasks, tasksDTO);
             return tasks;

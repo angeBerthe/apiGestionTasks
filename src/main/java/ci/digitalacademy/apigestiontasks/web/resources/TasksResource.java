@@ -31,37 +31,21 @@ import java.util.Optional;
 public class TasksResource {
 
     private final TasksService tasksService;
-    private final ProjectService projectService;
-    private final TeamService teamService;
-    private final NotificationService notificationService;
 
     @PostMapping
     @ApiResponse(responseCode = "201", description = "REST, request to save a task")
     @Operation(summary = "Save a new task", description = "This endpoint allows saving tasks and sends a notification")
     public ResponseEntity<?> save(@RequestBody TasksDTO tasks) {
         log.debug("Rest request to save Tasks : {}", tasks);
-        Optional<ProjectDTO> project = projectService.findOne(tasks.getProject().getId());
-        Optional<TeamDTO> team = teamService.findOne(tasks.getTeam().getId());
+        TasksDTO savedTasks = tasksService.saveWithProjectAndTeam(tasks);
 
-        if (project.isPresent() && team.isPresent()) {
-            tasks.setProject(project.get());
-            tasks.setTeam(team.get());
-
-            TasksDTO savedTask = tasksService.saveTasks(tasks);
-            notificationService.createNotification("save", savedTask);
-
-            return new ResponseEntity<>(savedTask, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>("Project or Team ID not found", HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(savedTasks, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TasksDTO> update(@PathVariable Long id, @RequestBody TasksDTO tasks) {
         log.debug("Rest request to update Tasks : {}", tasks);
         TasksDTO updatedTask = tasksService.update(tasks, id);
-
-        notificationService.createNotification("update", updatedTask);
 
         return new ResponseEntity<>(updatedTask, HttpStatus.OK);
     }
@@ -106,5 +90,6 @@ public class TasksResource {
         log.debug("Rest request to get all tasks");
         return tasksService.findAll();
     }
+
 
 }
