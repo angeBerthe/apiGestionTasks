@@ -35,10 +35,8 @@ public class Tasks implements Serializable {
     private String slug;
 
     @ManyToOne()
-    private Project project;
+    private Member member;
 
-    @OneToMany(mappedBy = "tasks", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Notification> notifications;
 
 
 

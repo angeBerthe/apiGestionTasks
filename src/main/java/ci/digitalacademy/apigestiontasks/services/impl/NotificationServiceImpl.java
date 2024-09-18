@@ -1,83 +1,59 @@
 package ci.digitalacademy.apigestiontasks.services.impl;
 
-import ci.digitalacademy.apigestiontasks.models.Notification;
-import ci.digitalacademy.apigestiontasks.repositories.NotificationRepository;
-import ci.digitalacademy.apigestiontasks.services.NotificationService;
-import ci.digitalacademy.apigestiontasks.services.dto.NotificationDTO;
-import ci.digitalacademy.apigestiontasks.services.dto.TasksDTO;
-import ci.digitalacademy.apigestiontasks.services.mapper.NotificationMapper;
-import ci.digitalacademy.apigestiontasks.utils.SlugifyUtils;
-import lombok.RequiredArgsConstructor;
+
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.apache.bcel.classfile.Code;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
 
-@RequiredArgsConstructor
+
+
 @Slf4j
 @Service
-public class NotificationServiceImpl implements NotificationService {
+public class NotificationServiceImpl  {
 
-    private final NotificationRepository notificationRepository;
-    private final NotificationMapper notificationMapper;
+    private final JavaMailSender javaMailSender;
 
-    @Override
-    public NotificationDTO save(NotificationDTO notificationDTO) {
-        log.debug("Request to save Notification : {}", notificationDTO);
-        Notification notification = notificationMapper.toEntity(notificationDTO);
-        notification = notificationRepository.save(notification);
-        return notificationMapper.fromEntity(notification);
+    public NotificationServiceImpl(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
     }
 
-    @Override
-    public List<NotificationDTO> findAll() {
-        return notificationRepository.findAll().stream().map(notification -> {
-            log.debug("Request to get Tasks : {}", notification);
-            return notificationMapper.fromEntity(notification);
-        }).toList();
-    }
+    public void sendNotificationMail(Code validation) {
+        try {
+            MimeMessage mail = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mail, true);
 
-    @Override
-    public Optional<NotificationDTO> delete(Long id) {
-        log.debug("Resquest to get id: {}", id);
-        return notificationRepository.findById(id).map(notification -> {
-            return notificationMapper.fromEntity(notification);
-        });
-    }
+            helper.setFrom("angeseugban2000@gmail.com");
+            helper.setSubject("Votre code d'activation");
 
-    @Override
-    public NotificationDTO saveNotification(NotificationDTO notificationDTO) {
-        log.debug("Request to save Tasks {} with slug", notificationDTO);
-        final String slug = SlugifyUtils.generate(String.valueOf(notificationDTO.getWording()));
-        notificationDTO.setSlug(slug);
-        return save(notificationDTO);
-    }
+            String content = "<html>" +
+                    "<body>" +
+                    "    <div style=\"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #edf2f7; padding: 20px; text-align: center;\">" +
+                    "        <div style=\"background-color: #ffffff; width: 100%; max-width: 480px; margin: auto; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; border-left: 5px solid #4a90e2;\">" +
+                    "            <div style=\"background-color: #4a90e2; color: white; padding: 20px; font-size: 18px; text-align: center;\">Authentification à double facteur</div>" +
+                    "            <div style=\"padding: 20px; color: #333333; line-height: 1.6; text-align: center;\">" +
+                    "                Merci d'utiliser l'authentification à double facteur pour sécuriser votre connexion. Voici votre code de vérification :<br>" +
+                    "                <div style=\"font-size: 24px; font-weight: bold; background-color: #E8F0FE; color: #4a90e2; padding: 10px 20px; border-radius: 8px; display: inline-block; margin: 20px 0;\">" +
+                    "                    " + validation.getCode() +
+                    "                </div>" +
+                    "                Ce code est valable pour une seule utilisation. Si vous ne l'avez pas demandé, veuillez ignorer cet e-mail." +
+                    "            </div>" +
+                    "            <div style=\"background-color: #f7f7f7; color: #666666; text-align: center; padding: 12px 20px; font-size: 14px;\">© 2024 Votre Entreprise. Tous droits réservés.</div>" +
+                    "        </div>" +
+                    "    </div>" +
+                    "</body>" +
+                    "</html>";
 
-    @Override
-    public NotificationDTO createNotification(String wording, TasksDTO tasks) {
-        log.debug("Creating notification for task: {}", tasks);
 
-        NotificationDTO notificationDTO = new NotificationDTO();
-        notificationDTO.setWording(wording);
-        notificationDTO.setDate(Instant.now());
-        notificationDTO.setTasks(tasks);
-
-        // Générer un slug unique
-        final String slug = SlugifyUtils.generate(wording);
-        notificationDTO.setSlug(slug);
-
-        return save(notificationDTO);
-    }
-
-    @Override
-    public List<NotificationDTO> findByWording(String wording) {
-        log.debug("Request to find Notifications by wording : {}", wording);
-        List<Notification> notifications = notificationRepository.findByWording(wording);
-        return notifications.stream()
-                .map(notificationMapper::fromEntity)
-                .toList();
+            helper.setText(content, true);
+            javaMailSender.send(mail);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
 }

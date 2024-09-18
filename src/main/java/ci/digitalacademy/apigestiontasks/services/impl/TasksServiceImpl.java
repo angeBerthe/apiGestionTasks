@@ -2,7 +2,9 @@ package ci.digitalacademy.apigestiontasks.services.impl;
 
 import ci.digitalacademy.apigestiontasks.models.Tasks;
 import ci.digitalacademy.apigestiontasks.repositories.TasksRepository;
+import ci.digitalacademy.apigestiontasks.services.MemberService;
 import ci.digitalacademy.apigestiontasks.services.TasksService;
+import ci.digitalacademy.apigestiontasks.services.dto.MemberDTO;
 import ci.digitalacademy.apigestiontasks.services.dto.TasksDTO;
 import ci.digitalacademy.apigestiontasks.services.dto.TeamDTO;
 import ci.digitalacademy.apigestiontasks.services.mapper.TasksMapper;
@@ -23,7 +25,7 @@ public class TasksServiceImpl implements TasksService {
 
     private final TasksRepository tasksRepository;
     private final TasksMapper tasksMapper;
-    private final TeamServiceImpl teamService;
+    private final MemberService memberService;
 
     @Override
     public TasksDTO save(TasksDTO tasksDTO) {
@@ -35,10 +37,10 @@ public class TasksServiceImpl implements TasksService {
 
     @Override
     public TasksDTO saveWithProjectAndTeam(TasksDTO tasks) {
-        Optional<TeamDTO> team = teamService.findOne(tasks.getTeam().getId());
+        Optional<MemberDTO> member = memberService.findOne(tasks.getMember().getId());
 
-        if (team.isPresent()) {
-            tasks.setTeam(team.get());
+        if (member.isPresent()) {
+            tasks.setMember(member.get());
             return saveTasks(tasks);
         } else {
             return null;

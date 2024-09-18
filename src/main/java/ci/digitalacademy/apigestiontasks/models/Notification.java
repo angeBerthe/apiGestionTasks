@@ -7,6 +7,7 @@ import lombok.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -30,7 +31,7 @@ public class Notification implements Serializable {
     private String slug;
 
     @ManyToOne
-    private Tasks tasks;
+    private Member member;
 
 
 }

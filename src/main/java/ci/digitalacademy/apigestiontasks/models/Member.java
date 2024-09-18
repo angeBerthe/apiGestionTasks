@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -45,5 +46,11 @@ public class Member implements Serializable {
     @ManyToOne
     private Team team;
 
+    @OneToMany(mappedBy = "member")
+    private Set<Tasks> tasks;
+
+
+    @OneToMany(mappedBy = "member")
+    private Set<Notification> notifications;
 
 }

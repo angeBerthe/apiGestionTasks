@@ -1,5 +1,6 @@
 package ci.digitalacademy.apigestiontasks.services.dto;
 
+import ci.digitalacademy.apigestiontasks.models.Member;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +22,5 @@ public class TasksDTO {
 
     private String slug;
 
-    private ProjectDTO project;
-
-    private TeamDTO team;
+    private MemberDTO member;
 }
