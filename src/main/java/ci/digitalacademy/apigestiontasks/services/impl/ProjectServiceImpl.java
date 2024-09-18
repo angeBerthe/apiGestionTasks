@@ -1,10 +1,14 @@
 package ci.digitalacademy.apigestiontasks.services.impl;
 
 import ci.digitalacademy.apigestiontasks.models.Project;
+import ci.digitalacademy.apigestiontasks.models.Team;
 import ci.digitalacademy.apigestiontasks.repositories.ProjectRepository;
 import ci.digitalacademy.apigestiontasks.services.ProjectService;
+import ci.digitalacademy.apigestiontasks.services.dto.MemberDTO;
 import ci.digitalacademy.apigestiontasks.services.dto.ProjectDTO;
+import ci.digitalacademy.apigestiontasks.services.dto.TeamDTO;
 import ci.digitalacademy.apigestiontasks.services.mapper.ProjectMapper;
+import ci.digitalacademy.apigestiontasks.services.mapper.TeamMapper;
 import ci.digitalacademy.apigestiontasks.services.mapping.ProjectMapping;
 import ci.digitalacademy.apigestiontasks.utils.SlugifyUtils;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -21,6 +26,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectMapper projectMapper;
     private final ProjectRepository projectRepository;
+    private final TeamMapper teamMapper;
 
     @Override
     public ProjectDTO save(ProjectDTO projectDTO) {
@@ -38,13 +44,10 @@ public class ProjectServiceImpl implements ProjectService {
         return save(projectDTO);
     }
 
-    @Override
-    public ProjectDTO update(ProjectDTO projectDTO) {
-        return null;
-    }
 
     @Override
     public Optional<ProjectDTO> findOne(Long id) {
+        log.debug("Resquest to get project by id: {}", id);
         return projectRepository.findById(id).map(project -> {
             return projectMapper.fromEntity(project);
         });
@@ -52,6 +55,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectDTO> findAll() {
+        log.debug("Resquest to get all project");
         return projectRepository.findAll().stream().map(project -> {
             return projectMapper.fromEntity(project);
         }).toList();
@@ -59,12 +63,14 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void delete(Long id) {
+        log.debug("Resquest to delete project");
         projectRepository.deleteById(id);
 
     }
 
     @Override
     public ProjectDTO update(ProjectDTO projectDTO, Long id) {
+        log.debug("Resquest to update project with two parameters :{} {}",projectDTO, id);
         return findOne(projectDTO.getId()).map(existingProject -> {
             existingProject.setNameProject(projectDTO.getNameProject());
             existingProject.setDescription(projectDTO.getDescription());
@@ -77,6 +83,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDTO partialupdate(ProjectDTO projectDTO, Long id) {
+        log.debug("Resquest to update partial project with two parameters :{} {}",projectDTO, id);
         return projectRepository.findById(id).map(project -> {
             ProjectMapping.partialUpdate(project, projectDTO);
             return project;
@@ -90,4 +97,19 @@ public class ProjectServiceImpl implements ProjectService {
             return projectMapper.fromEntity(teacher);
         });
     }
+
+    @Override
+    public List<TeamDTO> getTeamsByProjectId(Long id) {
+        log.debug("Request to get team of project with id: {}", id);
+        Optional<Project> teamOptional = projectRepository.findById(id);
+        if (teamOptional.isPresent()) {
+            Project project = teamOptional.get();
+            return project.getTeams().stream()
+                    .map(teamMapper::fromEntity)
+                    .collect(Collectors.toList());
+        } else {
+            throw new IllegalArgumentException("Team not found with id: " + id);
+        }
+    }
+
 }

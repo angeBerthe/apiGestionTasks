@@ -1,6 +1,7 @@
 package ci.digitalacademy.apigestiontasks.services;
 
 import ci.digitalacademy.apigestiontasks.services.dto.ProjectDTO;
+import ci.digitalacademy.apigestiontasks.services.dto.TeamDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,8 +9,6 @@ import java.util.Optional;
 public interface ProjectService {
 
     ProjectDTO save(ProjectDTO projectDTO);
-
-    ProjectDTO update(ProjectDTO projectDTO);
 
     Optional<ProjectDTO> findOne(Long id);
 
@@ -24,4 +23,6 @@ public interface ProjectService {
     ProjectDTO partialupdate(ProjectDTO projectDTO, Long id);
 
     Optional<ProjectDTO> findOneBySlug(String slug);
+
+    List<TeamDTO> getTeamsByProjectId(Long id);
 }

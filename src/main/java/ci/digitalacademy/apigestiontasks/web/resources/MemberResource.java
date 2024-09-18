@@ -73,18 +73,16 @@ public class MemberResource {
         return new ResponseEntity<>(memberService.update(memberDTO, id), HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
-    @Operation(summary = "partial update member", description = "this endpoint allow to update member")
-    public MemberDTO partialUpdate(@RequestBody MemberDTO memberDTO, @PathVariable Long id){
-        log.debug("REST Request to partial update {}", id);
-        return memberService.partialUpdate(memberDTO, id);
-    }
-
     @GetMapping("/slug/{slug}")
     @Operation(summary = "get member by slug", description = "this endpoint allow to get member by slug")
-    public Optional<MemberDTO> getOneBySlug(@PathVariable String slug){
+    public ResponseEntity<?> getOneBySlug(@PathVariable String slug){
         log.debug("REST Request to get one by slug {}", slug);
-        return memberService.findBySlug(slug);
+        Optional<MemberDTO> memberDTO = memberService.findBySlug(slug);
+        if (memberDTO.isPresent()){
+            return new ResponseEntity<>(memberDTO.get(),HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>("Slug project not found",HttpStatus.NOT_FOUND);
+        }
     }
 
 

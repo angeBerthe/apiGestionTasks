@@ -1,6 +1,8 @@
 package ci.digitalacademy.apigestiontasks.models;
 
 
+import ci.digitalacademy.apigestiontasks.enumeration.Gender;
+import ci.digitalacademy.apigestiontasks.enumeration.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,8 +31,14 @@ public class Member {
     @Column(unique = true)
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
     @Column(unique = true)
     private String slug;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @ManyToOne
     private Team team;

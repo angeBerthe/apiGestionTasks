@@ -1,5 +1,6 @@
 package ci.digitalacademy.apigestiontasks.services;
 
+import ci.digitalacademy.apigestiontasks.services.dto.MemberDTO;
 import ci.digitalacademy.apigestiontasks.services.dto.TeamDTO;
 
 import java.util.List;
@@ -19,4 +20,5 @@ public interface TeamService {
 
     void delete(Long id);
 
+    List<MemberDTO> getMembersByTeamId(Long id);
 }
