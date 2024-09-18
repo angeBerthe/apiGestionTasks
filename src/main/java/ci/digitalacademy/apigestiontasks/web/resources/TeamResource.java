@@ -29,17 +29,18 @@ public class TeamResource {
     private final ProjectService projectService;
 
     @PostMapping
-    @Operation(summary = "save Team", description = "this endpoint allow to save team")
-    public ResponseEntity<?> saveTeam(@RequestBody TeamDTO teamDTO) {
+    public TeamDTO save(@RequestBody TeamDTO teamDTO) {
+
         log.debug("REST Request to save {}", teamDTO);
-        Optional<ProjectDTO> projectDTO = projectService.findOne(teamDTO.getProject().getId());
+        /*Optional<ProjectDTO> projectDTO = projectService.findOne(teamDTO.getProject().getId());
         if (projectDTO.isPresent()){
             teamDTO.setProject(projectDTO.get());
             TeamDTO team = teamService.save(teamDTO);
             return new ResponseEntity<>(team, HttpStatus.CREATED);
         }else {
             return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
-        }
+        }*/
+        return teamService.save((teamDTO));
     }
 
     @GetMapping
