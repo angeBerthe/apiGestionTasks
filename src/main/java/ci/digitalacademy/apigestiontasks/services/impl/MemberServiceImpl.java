@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Optional<MemberDTO> findOne(Long id) {
-        log.debug("Resquest to get id: {}", id);
+        log.debug("Resquest to get by id: {}", id);
         return memberRepository.findById(id).map(member -> {
             return memberMapper.fromEntity(member);
         });
@@ -54,6 +54,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Optional<MemberDTO> findBySlug(String slug) {
+        log.debug("Resquest to get by slug: {}", slug);
         return memberRepository.findBySlug(slug).map(memberMapper::fromEntity);
     }
 
@@ -73,15 +74,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDTO update(MemberDTO memberDTO, Long id) {
+        log.debug("Resquest to update member with two parameters :{} {}",memberDTO, id);
         memberDTO.setId(id);
         return update(memberDTO);
     }
 
-    @Override
-    public MemberDTO partialUpdate(MemberDTO memberDTO, Long id) {
-        return memberRepository.findById(id).map(member -> {
-            MemberMapping.partialUpdate(member, memberDTO);
-            return member;
-        }).map(memberRepository::save).map(memberMapper::fromEntity).orElse(null);
-    }
 }

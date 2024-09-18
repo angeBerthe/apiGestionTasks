@@ -1,5 +1,7 @@
 package ci.digitalacademy.apigestiontasks.services.dto;
 
+import ci.digitalacademy.apigestiontasks.enumeration.Gender;
+import ci.digitalacademy.apigestiontasks.enumeration.Role;
 import ci.digitalacademy.apigestiontasks.models.Team;
 import jakarta.persistence.Column;
 import lombok.Getter;
@@ -18,6 +20,10 @@ public class MemberDTO {
     private String email;
 
     private String phoneNumber;
+
+    private Gender gender;
+
+    private Role role;
 
     private String slug;
 

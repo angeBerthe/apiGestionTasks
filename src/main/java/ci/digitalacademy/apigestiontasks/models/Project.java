@@ -31,7 +31,7 @@ public class Project {
     private LocalDate endDate;
 
     @Column(nullable = false)
-    private String status;
+    private Boolean status;
 
     @Column(unique = true)
     private String slug;

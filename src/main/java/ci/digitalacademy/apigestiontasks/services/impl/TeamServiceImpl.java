@@ -5,6 +5,7 @@ import ci.digitalacademy.apigestiontasks.repositories.TeamRepository;
 import ci.digitalacademy.apigestiontasks.services.TeamService;
 import ci.digitalacademy.apigestiontasks.services.dto.MemberDTO;
 import ci.digitalacademy.apigestiontasks.services.dto.TeamDTO;
+import ci.digitalacademy.apigestiontasks.services.mapper.MemberMapper;
 import ci.digitalacademy.apigestiontasks.services.mapper.TeamMapper;
 import ci.digitalacademy.apigestiontasks.utils.SlugifyUtils;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class TeamServiceImpl implements TeamService {
 
     private final TeamRepository teamRepository;
     private final TeamMapper teamMapper;
+    private final MemberMapper memberMapper;
 
     @Override
     public TeamDTO save(TeamDTO teamDTO) {
@@ -70,6 +72,19 @@ public class TeamServiceImpl implements TeamService {
     public void delete(Long id) {
         log.debug("Request to delete Team with id: {}", id);
         teamRepository.deleteById(id);
+    }
+
+    public List<MemberDTO> getMembersByTeamId(Long id) {
+        log.debug("Request to get members of Team with id: {}", id);
+        Optional<Team> teamOptional = teamRepository.findById(id);
+        if (teamOptional.isPresent()) {
+            Team team = teamOptional.get();
+            return team.getMembers().stream()
+                    .map(memberMapper::fromEntity)
+                    .collect(Collectors.toList());
+        } else {
+            throw new IllegalArgumentException("Team not found with id: " + id);
+        }
     }
 
 

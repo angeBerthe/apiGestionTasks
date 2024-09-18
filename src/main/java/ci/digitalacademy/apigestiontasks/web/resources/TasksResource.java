@@ -3,6 +3,7 @@ package ci.digitalacademy.apigestiontasks.web.resources;
 import ci.digitalacademy.apigestiontasks.services.NotificationService;
 import ci.digitalacademy.apigestiontasks.services.ProjectService;
 import ci.digitalacademy.apigestiontasks.services.TasksService;
+
 import ci.digitalacademy.apigestiontasks.services.TeamService;
 import ci.digitalacademy.apigestiontasks.services.dto.NotificationDTO;
 import ci.digitalacademy.apigestiontasks.services.dto.ProjectDTO;
@@ -11,6 +12,7 @@ import ci.digitalacademy.apigestiontasks.services.dto.TeamDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -87,6 +89,7 @@ public class TasksResource {
     }
 
     @GetMapping("/slug/{slug}")
+    @Operation(summary = "get task by slug", description = "this endpoint allow to get task by slug")
     public ResponseEntity<?> getTasksBySlug(@PathVariable String slug) {
         log.debug("Rest request to get Tasks by slug : {}", slug);
         Optional<TasksDTO> tasks = tasksService.findBySlug(slug);
@@ -98,8 +101,10 @@ public class TasksResource {
     }
 
     @GetMapping
+    @Operation(summary = "get all tasks", description = "this endpoint allow to get all tasks")
     public List<TasksDTO> getAllTasks() {
         log.debug("Rest request to get all tasks");
         return tasksService.findAll();
     }
+
 }

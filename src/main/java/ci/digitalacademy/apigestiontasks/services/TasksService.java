@@ -22,4 +22,6 @@ public interface TasksService {
     TasksDTO saveTasks(TasksDTO tasksDTO);
 
     Optional<TasksDTO> findBySlug(String slug);
+
+    TasksDTO partialUpdate(TasksDTO tasksDTO, Long id);
 }

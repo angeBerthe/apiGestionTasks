@@ -22,5 +22,5 @@ public interface MemberService {
 
 
     MemberDTO update(MemberDTO memberDTO, Long id);
-    MemberDTO partialUpdate(MemberDTO memberDTO, Long id);
+
 }

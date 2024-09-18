@@ -19,7 +19,7 @@ public class ProjectDTO {
 
     private LocalDate endDate;
 
-    private String status;
+    private Boolean status;
 
     private String slug;
 }

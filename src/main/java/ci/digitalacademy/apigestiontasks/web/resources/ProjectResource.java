@@ -1,7 +1,9 @@
 package ci.digitalacademy.apigestiontasks.web.resources;
 
 import ci.digitalacademy.apigestiontasks.services.ProjectService;
+import ci.digitalacademy.apigestiontasks.services.dto.MemberDTO;
 import ci.digitalacademy.apigestiontasks.services.dto.ProjectDTO;
+import ci.digitalacademy.apigestiontasks.services.dto.TeamDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -85,7 +87,12 @@ public class ProjectResource {
         if (projectDTO.isPresent()){
             return new ResponseEntity<>(projectDTO.get(),HttpStatus.OK);
         }else {
-            return new ResponseEntity<>(projectDTO.get(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Slug project not found",HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/teams/{id}")
+    public List<TeamDTO> getTeamsByProjectId(@PathVariable Long id) {
+        return projectService.getTeamsByProjectId(id);
     }
 }

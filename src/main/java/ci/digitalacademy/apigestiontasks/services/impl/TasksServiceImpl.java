@@ -5,6 +5,8 @@ import ci.digitalacademy.apigestiontasks.repositories.TasksRepository;
 import ci.digitalacademy.apigestiontasks.services.TasksService;
 import ci.digitalacademy.apigestiontasks.services.dto.TasksDTO;
 import ci.digitalacademy.apigestiontasks.services.mapper.TasksMapper;
+import ci.digitalacademy.apigestiontasks.services.mapping.ProjectMapping;
+import ci.digitalacademy.apigestiontasks.services.mapping.TaskMapping;
 import ci.digitalacademy.apigestiontasks.utils.SlugifyUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -84,5 +86,13 @@ public class TasksServiceImpl implements TasksService {
         return tasksRepository.findBySlug(slug).map(tasks -> {
             return tasksMapper.fromEntity(tasks);
         });
+    }
+
+    @Override
+    public TasksDTO partialUpdate(TasksDTO tasksDTO, Long id) {
+        return tasksRepository.findById(id).map(tasks -> {
+            TaskMapping.partialUpdate(tasks, tasksDTO);
+            return tasks;
+        }).map(tasksRepository::save).map(tasksMapper::fromEntity).orElse(null);
     }
 }
