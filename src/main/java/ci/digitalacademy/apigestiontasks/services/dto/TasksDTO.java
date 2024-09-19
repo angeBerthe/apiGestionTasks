@@ -1,5 +1,6 @@
 package ci.digitalacademy.apigestiontasks.services.dto;
 
+import ci.digitalacademy.apigestiontasks.models.Member;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,15 +14,9 @@ public class TasksDTO {
 
     private String wording;
 
-    private LocalDate startDate;
-
-    private LocalDate endDate;
-
-    private String status;
+    private String delais;
 
     private String slug;
 
-    private ProjectDTO project;
-
-    private TeamDTO team;
+    private MemberDTO member;
 }

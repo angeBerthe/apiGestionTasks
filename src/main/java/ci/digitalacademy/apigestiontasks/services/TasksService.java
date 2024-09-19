@@ -25,5 +25,5 @@ public interface TasksService {
 
     TasksDTO partialUpdate(TasksDTO tasksDTO, Long id);
 
-    TasksDTO saveWithProjectAndTeam(TasksDTO tasks);
+
 }

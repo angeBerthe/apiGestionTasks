@@ -23,4 +23,5 @@ public interface MemberService {
 
     MemberDTO update(MemberDTO memberDTO, Long id);
 
+    MemberDTO saveMember(MemberDTO memberDTO);
 }

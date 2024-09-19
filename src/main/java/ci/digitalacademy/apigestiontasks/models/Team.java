@@ -27,12 +27,6 @@ public class Team implements Serializable {
     @Column(unique = true)
     private String slug;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Tasks> tasks;
-
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Member> members;
-
     @ManyToOne
     private Project project;
 

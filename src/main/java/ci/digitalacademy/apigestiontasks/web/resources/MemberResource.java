@@ -26,19 +26,12 @@ import java.util.Optional;
 public class MemberResource {
 
     private final MemberService memberService;
-    private final TeamService teamService;
 
     @PostMapping
     @Operation(summary = "save member", description = "this endpoint allow to save member")
-    public ResponseEntity<?> saveMember(@RequestBody MemberDTO memberDTO){
+    public ResponseEntity<MemberDTO> saveMember(@RequestBody MemberDTO memberDTO){
         log.debug("REST Request to save  {}", memberDTO);
-        Optional<TeamDTO> teamDTO = teamService.findOne(memberDTO.getTeam().getId());
-        if (teamDTO.isPresent()){
-            memberDTO.setTeam(teamDTO.get());
-            MemberDTO member = memberService.save(memberDTO);
-            return new ResponseEntity<>(member, HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>("not found", HttpStatus.CREATED);
+        return new ResponseEntity<>(memberService.saveMember(memberDTO), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

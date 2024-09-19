@@ -25,18 +25,8 @@ public class Project implements Serializable {
 
     private String description;
 
-    @Column(nullable = false)
-    private LocalDate startDate;
-
-    private LocalDate endDate;
-
-    @Column(nullable = false)
-    private Boolean status;
-
     @Column(unique = true)
     private String slug;
 
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-   private Set<Team> teams;
 }

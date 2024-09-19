@@ -4,11 +4,16 @@ package ci.digitalacademy.apigestiontasks.services.impl;
 import ci.digitalacademy.apigestiontasks.models.Member;
 import ci.digitalacademy.apigestiontasks.repositories.MemberRepository;
 import ci.digitalacademy.apigestiontasks.services.MemberService;
+import ci.digitalacademy.apigestiontasks.services.NotificationMailService;
+import ci.digitalacademy.apigestiontasks.services.TeamService;
 import ci.digitalacademy.apigestiontasks.services.dto.MemberDTO;
+import ci.digitalacademy.apigestiontasks.services.dto.TeamDTO;
 import ci.digitalacademy.apigestiontasks.services.mapper.MemberMapper;
 import ci.digitalacademy.apigestiontasks.utils.SlugifyUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,12 +27,18 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
+    private final TeamService teamService;
+    private final NotificationMailService notificationMailService;
+
 
     @Override
     public MemberDTO save(MemberDTO memberDTO) {
         log.debug("Request to save: {}", memberDTO);
+        Optional<TeamDTO> teamDTO = teamService.findOne(memberDTO.getTeam().getId());
+        if (teamDTO.isPresent()){
+            memberDTO.setTeam(teamDTO.get());
+        }
         Member member = memberMapper.toEntity(memberDTO);
-        member.setSlug(SlugifyUtils.generate(member.getEmail()));
         member = memberRepository.save(member);
         return memberMapper.fromEntity(member);
     }
@@ -77,6 +88,16 @@ public class MemberServiceImpl implements MemberService {
         log.debug("Resquest to update member with two parameters :{} {}",memberDTO, id);
         memberDTO.setId(id);
         return update(memberDTO);
+    }
+
+    @Override
+    public MemberDTO saveMember(MemberDTO memberDTO) {
+        log.debug("Request to save Member {} with slug", memberDTO);
+        final String slug = SlugifyUtils.generate(String.valueOf(memberDTO.getEmail()));
+        memberDTO.setSlug(slug);
+        MemberDTO memberDTO1 = save(memberDTO);
+        notificationMailService.sendNoficationMailAddMemberByTeam(memberDTO);
+        return memberDTO1;
     }
 
 }

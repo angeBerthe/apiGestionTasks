@@ -91,8 +91,4 @@ public class ProjectResource {
         }
     }
 
-    @GetMapping("/teams/{id}")
-    public List<TeamDTO> getTeamsByProjectId(@PathVariable Long id) {
-        return projectService.getTeamsByProjectId(id);
-    }
 }

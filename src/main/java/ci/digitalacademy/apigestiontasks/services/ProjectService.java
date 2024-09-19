@@ -24,5 +24,4 @@ public interface ProjectService {
 
     Optional<ProjectDTO> findOneBySlug(String slug);
 
-    List<TeamDTO> getTeamsByProjectId(Long id);
 }

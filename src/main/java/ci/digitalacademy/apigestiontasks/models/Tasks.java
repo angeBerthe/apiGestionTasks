@@ -24,21 +24,14 @@ public class Tasks implements Serializable {
     private String wording;
 
     @Column(nullable = false)
-    private LocalDate startDate;
-
-    private LocalDate endDate;
-
-    @Column(nullable = false)
-    private String status;
+    private String delais;
 
     @Column(unique = true)
     private String slug;
 
-    @ManyToOne()
-    private Project project;
+    @ManyToOne
+    private Member member;
 
-    @OneToMany(mappedBy = "tasks", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Notification> notifications;
 
 
 

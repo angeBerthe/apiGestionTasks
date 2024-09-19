@@ -30,16 +30,9 @@ public class TeamResource {
 
     @PostMapping
     @Operation(summary = "save team", description = "this endpoint allow to save team")
-    public ResponseEntity<? > save(@RequestBody TeamDTO teamDTO) {
+    public ResponseEntity<TeamDTO > save(@RequestBody TeamDTO teamDTO) {
         log.debug("REST Request to save {}", teamDTO);
-        Optional<ProjectDTO> projectDTO = projectService.findOne(teamDTO.getProject().getId());
-        if (projectDTO.isPresent()){
-            teamDTO.setProject(projectDTO.get());
-            TeamDTO team = teamService.save(teamDTO);
-            return new ResponseEntity<>(team, HttpStatus.CREATED);
-        }else {
-            return new ResponseEntity<>("not found", HttpStatus.NOT_FOUND);
-        }
+       return new ResponseEntity<>(teamService.saveTeam(teamDTO), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -92,9 +85,4 @@ public class TeamResource {
         teamService.delete(id);
     }
 
-    @GetMapping("/members/{id}")
-    @Operation(summary = "get list members by team", description = "this endpoint allow to get list members by team")
-    public List<MemberDTO> getMembersByTeamId(@PathVariable Long id) {
-        return teamService.getMembersByTeamId(id);
-    }
 }
