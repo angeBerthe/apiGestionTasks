@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,4 +24,7 @@ public class User implements Serializable {
     private String username;
 
     private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<RoleUser> roleUsers;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,4 +17,7 @@ public class RoleUser implements Serializable {
 
     @Id
     private String role;
+
+    @ManyToMany(mappedBy = "roleUsers")
+    private List<User> users;
 }
