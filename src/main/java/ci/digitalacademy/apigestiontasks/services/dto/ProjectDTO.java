@@ -1,6 +1,7 @@
 package ci.digitalacademy.apigestiontasks.services.dto;
 
 import ci.digitalacademy.apigestiontasks.models.Team;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,13 +18,6 @@ public class ProjectDTO {
 
     private String description;
 
-    private LocalDate startDate;
-
-    private LocalDate endDate;
-
-    private Boolean status;
-
     private String slug;
 
-    private Set<TeamDTO> teams;
 }

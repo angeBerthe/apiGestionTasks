@@ -20,5 +20,5 @@ public interface TeamService {
 
     void delete(Long id);
 
-    List<MemberDTO> getMembersByTeamId(Long id);
+    TeamDTO saveTeam(TeamDTO teamDTO);
 }

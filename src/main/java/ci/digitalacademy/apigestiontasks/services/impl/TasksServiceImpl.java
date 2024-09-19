@@ -3,6 +3,7 @@ package ci.digitalacademy.apigestiontasks.services.impl;
 import ci.digitalacademy.apigestiontasks.models.Tasks;
 import ci.digitalacademy.apigestiontasks.repositories.TasksRepository;
 import ci.digitalacademy.apigestiontasks.services.MemberService;
+import ci.digitalacademy.apigestiontasks.services.NotificationMailService;
 import ci.digitalacademy.apigestiontasks.services.TasksService;
 import ci.digitalacademy.apigestiontasks.services.dto.MemberDTO;
 import ci.digitalacademy.apigestiontasks.services.dto.TasksDTO;
@@ -26,25 +27,19 @@ public class TasksServiceImpl implements TasksService {
     private final TasksRepository tasksRepository;
     private final TasksMapper tasksMapper;
     private final MemberService memberService;
+    private final NotificationMailService  notificationMailService;
 
     @Override
     public TasksDTO save(TasksDTO tasksDTO) {
         log.debug("Request to save Tasks : {}", tasksDTO);
+        Optional<MemberDTO> memberDTO = memberService.findOne(tasksDTO.getMember().getId());
+        if (memberDTO.isPresent()){
+            tasksDTO.setMember(memberDTO.get());
+        }
         Tasks tasks = tasksMapper.toEntity(tasksDTO);
         tasks = tasksRepository.save(tasks);
         return tasksMapper.fromEntity(tasks);
-    }
 
-    @Override
-    public TasksDTO saveWithProjectAndTeam(TasksDTO tasks) {
-        Optional<MemberDTO> member = memberService.findOne(tasks.getMember().getId());
-
-        if (member.isPresent()) {
-            tasks.setMember(member.get());
-            return saveTasks(tasks);
-        } else {
-            return null;
-        }
 }
 
     @Override
@@ -60,9 +55,6 @@ public class TasksServiceImpl implements TasksService {
         log.debug("Request to update Tasks : {}", tasksDTO);
         return findOne(tasksDTO.getId()).map(tasks -> {
             tasks.setWording(tasksDTO.getWording());
-            tasks.setStatus(tasksDTO.getStatus());
-            tasks.setStartDate(tasksDTO.getStartDate());
-            tasks.setEndDate(tasksDTO.getEndDate());
             return save(tasks);
         }).orElseThrow(() -> new IllegalArgumentException("Task not found"));
     }
@@ -93,7 +85,9 @@ public class TasksServiceImpl implements TasksService {
         log.debug("Request to save Tasks {} with slug", tasksDTO);
         final String slug = SlugifyUtils.generate(String.valueOf(tasksDTO.getWording()));
         tasksDTO.setSlug(slug);
-        return save(tasksDTO);
+        TasksDTO tasksDTO1 = save(tasksDTO);
+        notificationMailService.sendNoficationMailAttributeTaskByMember(tasksDTO);
+        return tasksDTO1;
     }
 
     @Override

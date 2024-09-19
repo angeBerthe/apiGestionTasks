@@ -1,14 +1,8 @@
 package ci.digitalacademy.apigestiontasks.web.resources;
 
-import ci.digitalacademy.apigestiontasks.services.NotificationService;
-import ci.digitalacademy.apigestiontasks.services.ProjectService;
 import ci.digitalacademy.apigestiontasks.services.TasksService;
 
-import ci.digitalacademy.apigestiontasks.services.TeamService;
-import ci.digitalacademy.apigestiontasks.services.dto.NotificationDTO;
-import ci.digitalacademy.apigestiontasks.services.dto.ProjectDTO;
 import ci.digitalacademy.apigestiontasks.services.dto.TasksDTO;
-import ci.digitalacademy.apigestiontasks.services.dto.TeamDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,11 +29,9 @@ public class TasksResource {
     @PostMapping
     @ApiResponse(responseCode = "201", description = "REST, request to save a task")
     @Operation(summary = "Save a new task", description = "This endpoint allows saving tasks and sends a notification")
-    public ResponseEntity<?> save(@RequestBody TasksDTO tasks) {
-        log.debug("Rest request to save Tasks : {}", tasks);
-        TasksDTO savedTasks = tasksService.saveWithProjectAndTeam(tasks);
-
-        return new ResponseEntity<>(savedTasks, HttpStatus.CREATED);
+    public ResponseEntity<TasksDTO> save(@RequestBody TasksDTO tasksDTO) {
+        log.debug("Rest request to save Tasks : {}", tasksDTO);
+        return new ResponseEntity<>(tasksService.saveTasks(tasksDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

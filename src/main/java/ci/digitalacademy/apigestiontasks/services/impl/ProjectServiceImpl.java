@@ -74,9 +74,6 @@ public class ProjectServiceImpl implements ProjectService {
         return findOne(projectDTO.getId()).map(existingProject -> {
             existingProject.setNameProject(projectDTO.getNameProject());
             existingProject.setDescription(projectDTO.getDescription());
-            existingProject.setStatus(projectDTO.getStatus());
-            existingProject.setStartDate(projectDTO.getStartDate());
-            existingProject.setEndDate(projectDTO.getEndDate());
             return save(existingProject);
         }).orElseThrow(()->new IllegalArgumentException());
     }
@@ -98,18 +95,5 @@ public class ProjectServiceImpl implements ProjectService {
         });
     }
 
-    @Override
-    public List<TeamDTO> getTeamsByProjectId(Long id) {
-        log.debug("Request to get team of project with id: {}", id);
-        Optional<Project> teamOptional = projectRepository.findById(id);
-        if (teamOptional.isPresent()) {
-            Project project = teamOptional.get();
-            return project.getTeams().stream()
-                    .map(teamMapper::fromEntity)
-                    .collect(Collectors.toList());
-        } else {
-            throw new IllegalArgumentException("Team not found with id: " + id);
-        }
-    }
 
 }

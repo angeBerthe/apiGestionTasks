@@ -2,14 +2,19 @@ package ci.digitalacademy.apigestiontasks.services.impl;
 
 import ci.digitalacademy.apigestiontasks.models.Team;
 import ci.digitalacademy.apigestiontasks.repositories.TeamRepository;
+import ci.digitalacademy.apigestiontasks.services.ProjectService;
 import ci.digitalacademy.apigestiontasks.services.TeamService;
 import ci.digitalacademy.apigestiontasks.services.dto.MemberDTO;
+import ci.digitalacademy.apigestiontasks.services.dto.ProjectDTO;
 import ci.digitalacademy.apigestiontasks.services.dto.TeamDTO;
 import ci.digitalacademy.apigestiontasks.services.mapper.MemberMapper;
+import ci.digitalacademy.apigestiontasks.services.mapper.ProjectMapper;
 import ci.digitalacademy.apigestiontasks.services.mapper.TeamMapper;
 import ci.digitalacademy.apigestiontasks.utils.SlugifyUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,12 +30,16 @@ public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
     private final TeamMapper teamMapper;
     private final MemberMapper memberMapper;
+    private final ProjectService projectService;
 
     @Override
     public TeamDTO save(TeamDTO teamDTO) {
         log.debug("Request to save Team : {}", teamDTO);
+        Optional<ProjectDTO> projectDTO = projectService.findOne(teamDTO.getProject().getId());
+        if (projectDTO.isPresent()){
+            teamDTO.setProject(projectDTO.get());
+        }
         Team team = teamMapper.toEntity(teamDTO);
-        team.setSlug(SlugifyUtils.generate(team.getNameTeam()));
         team = teamRepository.save(team);
         return teamMapper.fromEntity(team);
     }
@@ -74,17 +83,12 @@ public class TeamServiceImpl implements TeamService {
         teamRepository.deleteById(id);
     }
 
-    public List<MemberDTO> getMembersByTeamId(Long id) {
-        log.debug("Request to get members of Team with id: {}", id);
-        Optional<Team> teamOptional = teamRepository.findById(id);
-        if (teamOptional.isPresent()) {
-            Team team = teamOptional.get();
-            return team.getMembers().stream()
-                    .map(memberMapper::fromEntity)
-                    .collect(Collectors.toList());
-        } else {
-            throw new IllegalArgumentException("Team not found with id: " + id);
-        }
+    @Override
+    public TeamDTO saveTeam(TeamDTO teamDTO) {
+        log.debug("Request to save project and slug {}", teamDTO);
+        final String slug = SlugifyUtils.generate(teamDTO.getNameTeam());
+        teamDTO.setSlug(slug);
+        return save(teamDTO);
     }
 
 

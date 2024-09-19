@@ -9,8 +9,5 @@ public class ProjectMapping {
     }
 
     public static void partialUpdate(Project project, ProjectDTO projectDTO){
-        if (projectDTO.getEndDate()!=null){
-            project.setEndDate(projectDTO.getEndDate());
-        }
     }
 }

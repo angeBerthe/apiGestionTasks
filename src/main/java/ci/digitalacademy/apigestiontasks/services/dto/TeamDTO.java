@@ -24,9 +24,6 @@ public class TeamDTO {
     private String slug;
 
 
-    private Set<MemberDTO> members;
-
-
     private ProjectDTO project;
 
 }

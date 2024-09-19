@@ -14,11 +14,7 @@ public class TasksDTO {
 
     private String wording;
 
-    private LocalDate startDate;
-
-    private LocalDate endDate;
-
-    private String status;
+    private String delais;
 
     private String slug;
 

@@ -2,12 +2,11 @@ package ci.digitalacademy.apigestiontasks.models;
 
 
 import ci.digitalacademy.apigestiontasks.enumeration.Gender;
-import ci.digitalacademy.apigestiontasks.enumeration.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.Set;
+
 
 @Getter
 @Setter
@@ -40,17 +39,8 @@ public class Member implements Serializable {
     @Column(unique = true)
     private String slug;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
     @ManyToOne
     private Team team;
 
-    @OneToMany(mappedBy = "member")
-    private Set<Tasks> tasks;
-
-
-    @OneToMany(mappedBy = "member")
-    private Set<Notification> notifications;
 
 }
