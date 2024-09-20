@@ -1,4 +1,4 @@
-package ci.digitalacademy.apigestiontasks.enumeration;
+package ci.digitalacademy.apigestiontasks.models.enumeration;
 
 public enum Gender {
 

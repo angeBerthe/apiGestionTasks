@@ -1,7 +1,7 @@
 package ci.digitalacademy.apigestiontasks.models;
 
 
-import ci.digitalacademy.apigestiontasks.enumeration.Gender;
+import ci.digitalacademy.apigestiontasks.models.enumeration.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 

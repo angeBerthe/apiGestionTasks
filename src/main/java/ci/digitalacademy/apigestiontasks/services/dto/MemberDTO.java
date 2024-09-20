@@ -1,6 +1,6 @@
 package ci.digitalacademy.apigestiontasks.services.dto;
 
-import ci.digitalacademy.apigestiontasks.enumeration.Gender;
+import ci.digitalacademy.apigestiontasks.models.enumeration.Gender;
 import lombok.Getter;
 import lombok.Setter;
 

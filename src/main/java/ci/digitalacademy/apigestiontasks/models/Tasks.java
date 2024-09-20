@@ -31,8 +31,4 @@ public class Tasks implements Serializable {
 
     @ManyToOne
     private Member member;
-
-
-
-
 }
